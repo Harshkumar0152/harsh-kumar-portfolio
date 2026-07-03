@@ -27,17 +27,15 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       const loginTime = localStorage.getItem("loginTime");
 
-      // ❌ No login → force logout
       if (!loginTime) {
         signOut(auth);
         setUser(null);
         return;
       }
 
-      const SESSION_TIME = 10 * 60 * 1000; // 10 minutes
+      const SESSION_TIME = 10 * 60 * 1000;
       const diff = Date.now() - Number(loginTime);
 
-      // ⏰ Session expired
       if (diff >= SESSION_TIME) {
         signOut(auth);
         localStorage.removeItem("loginTime");

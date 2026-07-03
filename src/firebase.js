@@ -16,7 +16,7 @@ export const auth = getAuth(app);
 
 export const provider = new GoogleAuthProvider();
 
-// 👇 Har login par Google account select karna padega
+// 🔥 Force account selection every login
 provider.setCustomParameters({
   prompt: "select_account",
 });

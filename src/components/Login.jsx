@@ -4,12 +4,12 @@ import { auth, provider } from "../firebase";
 import "../stylesheets/Login.css";
 
 export default function Login() {
-  // Check session when component loads
+
   useEffect(() => {
     const loginTime = localStorage.getItem("loginTime");
 
     if (loginTime) {
-      const SESSION_TIME = 10 * 60 * 1000; // 10 minutes
+      const SESSION_TIME = 10 * 60 * 1000;
       const diff = Date.now() - Number(loginTime);
 
       if (diff >= SESSION_TIME) {
@@ -30,18 +30,17 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
+      // 🔥 Force fresh login every time
+      await signOut(auth);
+      localStorage.removeItem("loginTime");
+
       await signInWithPopup(auth, provider);
 
-      // Login alerts
       alert("✅ Login Successful!");
-      alert(
-        "⚠️ Your session is valid for only 10 minutes. After that, you will need to log in again."
-      );
+      alert("⚠️ Session valid for 10 minutes only.");
 
-      // Save login time
       localStorage.setItem("loginTime", Date.now());
 
-      // Auto logout after 10 minutes
       setTimeout(async () => {
         await signOut(auth);
         localStorage.removeItem("loginTime");
@@ -66,8 +65,7 @@ export default function Login() {
 
         <p>
           Welcome! Sign in with your Google account to explore my portfolio,
-          projects, certifications, resume, and professional journey in Data
-          Analytics.
+          projects, certifications, resume, and professional journey in Data Analytics.
         </p>
 
         <button className="google-btn" onClick={handleLogin}>
