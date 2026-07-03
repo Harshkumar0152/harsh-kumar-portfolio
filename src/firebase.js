@@ -2,7 +2,8 @@ import { initializeApp } from "firebase/app";
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
@@ -12,18 +13,15 @@ const firebaseConfig = {
   apiKey: "AIzaSyDawcu89o9mxf3Mrn5URrIQA71bNBT_E04",
   authDomain: "harshkaushik01-portfolio.firebaseapp.com",
   projectId: "harshkaushik01-portfolio",
-  storageBucket: "harshkaushik01-portfolio.appspot.com", // ✅ Check this matches Firebase Console
+  storageBucket: "harshkaushik01-portfolio.appspot.com",
   messagingSenderId: "386297952062",
   appId: "1:386297952062:web:3032f06e2f96b5b750de6f",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Firebase Auth
 export const auth = getAuth(app);
 
-// Google Provider
 export const provider = new GoogleAuthProvider();
 
 provider.setCustomParameters({
@@ -33,37 +31,36 @@ provider.setCustomParameters({
 provider.addScope("email");
 provider.addScope("profile");
 
-// ================================
 // LOGIN
-// ================================
 export const loginWithGoogle = async () => {
+  await signInWithRedirect(auth, provider);
+};
+
+// Redirect Result
+export const handleRedirectResult = async () => {
   try {
-    const result = await signInWithPopup(auth, provider);
+    const result = await getRedirectResult(auth);
 
-    localStorage.setItem("loginTime", Date.now().toString());
+    if (result?.user) {
+      localStorage.setItem("loginTime", Date.now().toString());
+      return result.user;
+    }
 
-    return result.user;
+    return null;
   } catch (error) {
-    console.error("Google Login Error:", error);
-    throw error;
+    console.error(error);
+    return null;
   }
 };
 
-// ================================
 // LOGOUT
-// ================================
 export const logoutUser = async () => {
-  try {
-    await signOut(auth);
-  } finally {
-    localStorage.removeItem("loginTime");
-    sessionStorage.clear();
-  }
+  await signOut(auth);
+  localStorage.removeItem("loginTime");
+  sessionStorage.clear();
 };
 
-// ================================
 // AUTH LISTENER
-// ================================
 export const onAuthChange = (callback) => {
   return onAuthStateChanged(auth, callback);
 };
