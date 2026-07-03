@@ -1,6 +1,13 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged,
+} from "firebase/auth";
 
+// 🔥 Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyDawcu89o9mxf3Mrn5URrIQA71bNBT_E04",
   authDomain: "harshkaushik01-portfolio.firebaseapp.com",
@@ -10,13 +17,54 @@ const firebaseConfig = {
   appId: "1:386297952062:web:3032f06e2f96b5b750de6f",
 };
 
+// 🔥 Init App
 const app = initializeApp(firebaseConfig);
 
+// 🔥 Auth
 export const auth = getAuth(app);
 
+// 🔥 Google Provider
 export const provider = new GoogleAuthProvider();
 
-// 🔥 Force account selection every login
+// ✅ IMPORTANT FIX (prevents silent auto login behavior)
 provider.setCustomParameters({
   prompt: "select_account",
 });
+
+
+// ================================
+// 🔐 LOGIN
+// ================================
+export const loginWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    return result.user;
+  } catch (error) {
+    console.log("Login Error:", error);
+  }
+};
+
+
+// ================================
+// 🚪 LOGOUT (IMPORTANT FIX ADDED)
+// ================================
+export const logoutUser = async () => {
+  try {
+    await signOut(auth);
+
+    // 🔥 extra safety (clears session hints)
+    await auth.signOut?.();
+  } catch (error) {
+    console.log("Logout Error:", error);
+  }
+};
+
+
+// ================================
+// 👤 AUTH STATE LISTENER
+// ================================
+export const onAuthChange = (callback) => {
+  return onAuthStateChanged(auth, (user) => {
+    callback(user);
+  });
+};
