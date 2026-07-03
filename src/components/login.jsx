@@ -14,13 +14,11 @@ export default function Login() {
   return (
     <div className="login-page">
       <div className="login-card">
-
         <div className="login-logo">
           <img src="/images/photo.jpeg" alt="Harsh Kumar" />
         </div>
 
         <h1>Harsh Kumar</h1>
-
         <h3>Data Analyst Portfolio</h3>
 
         <p>
@@ -41,7 +39,6 @@ export default function Login() {
           Powered by <strong>Harsh Kaushik</strong> <br />
           © 2026 All Rights Reserved
         </span>
-
       </div>
     </div>
   );
