@@ -24,9 +24,30 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    return onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      const loginTime = localStorage.getItem("loginTime");
+
+      // ❌ No login → force logout
+      if (!loginTime) {
+        signOut(auth);
+        setUser(null);
+        return;
+      }
+
+      const SESSION_TIME = 10 * 60 * 1000; // 10 minutes
+      const diff = Date.now() - Number(loginTime);
+
+      // ⏰ Session expired
+      if (diff >= SESSION_TIME) {
+        signOut(auth);
+        localStorage.removeItem("loginTime");
+        setUser(null);
+      } else {
+        setUser(currentUser);
+      }
     });
+
+    return () => unsubscribe();
   }, []);
 
   if (!user) {
@@ -38,7 +59,11 @@ function App() {
       <ToastContainer />
 
       <button
-        onClick={() => signOut(auth)}
+        onClick={() => {
+          signOut(auth);
+          localStorage.removeItem("loginTime");
+          setUser(null);
+        }}
         style={{
           position: "fixed",
           top: 20,

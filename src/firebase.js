@@ -13,4 +13,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
+
 export const provider = new GoogleAuthProvider();
+
+// 👇 Har login par Google account select karna padega
+provider.setCustomParameters({
+  prompt: "select_account",
+});
