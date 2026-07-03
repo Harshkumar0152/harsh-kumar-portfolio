@@ -12,7 +12,6 @@ import {
 
 import {
   SiMysql,
-  SiTableau,
   SiPostman,
   SiCplusplus,
   SiPandas,
