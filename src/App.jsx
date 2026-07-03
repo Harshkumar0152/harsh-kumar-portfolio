@@ -2,10 +2,15 @@ import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 
 import { ToastContainer } from "react-toastify";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth, logoutUser } from "./firebase";
 import { useEffect, useState } from "react";
 import { Analytics } from "@vercel/analytics/react";
+
+import { onAuthStateChanged } from "firebase/auth";
+import {
+  auth,
+  logoutUser,
+  handleRedirectResult,
+} from "./firebase";
 
 import Login from "./components/Login";
 
@@ -28,6 +33,11 @@ function App() {
   const SESSION_TIME = 10 * 60 * 1000;
 
   useEffect(() => {
+    // Handle Google Redirect Login
+    handleRedirectResult();
+
+    let logoutTimer;
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       const loginTime = localStorage.getItem("loginTime");
 
@@ -45,19 +55,24 @@ function App() {
       } else {
         setUser(currentUser);
 
-        // FIX: clear old timers before setting new one
         const remainingTime = SESSION_TIME - diff;
 
-        setTimeout(async () => {
+        clearTimeout(logoutTimer);
+
+        logoutTimer = setTimeout(async () => {
           await logoutUser();
           setUser(null);
+          alert("⏰ Session expired. Please login again.");
         }, remainingTime);
       }
 
       setLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      clearTimeout(logoutTimer);
+    };
   }, []);
 
   const handleLogout = async () => {

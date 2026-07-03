@@ -18,10 +18,13 @@ const firebaseConfig = {
   appId: "1:386297952062:web:3032f06e2f96b5b750de6f",
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+// Firebase Auth
 export const auth = getAuth(app);
 
+// Google Provider
 export const provider = new GoogleAuthProvider();
 
 provider.setCustomParameters({
@@ -31,12 +34,21 @@ provider.setCustomParameters({
 provider.addScope("email");
 provider.addScope("profile");
 
-// LOGIN
+// ================================
+// LOGIN (Redirect)
+// ================================
 export const loginWithGoogle = async () => {
-  await signInWithRedirect(auth, provider);
+  try {
+    await signInWithRedirect(auth, provider);
+  } catch (error) {
+    console.error("Google Login Error:", error);
+    throw error;
+  }
 };
 
-// Redirect Result
+// ================================
+// HANDLE REDIRECT RESULT
+// ================================
 export const handleRedirectResult = async () => {
   try {
     const result = await getRedirectResult(auth);
@@ -48,19 +60,26 @@ export const handleRedirectResult = async () => {
 
     return null;
   } catch (error) {
-    console.error(error);
+    console.error("Redirect Login Error:", error);
     return null;
   }
 };
 
+// ================================
 // LOGOUT
+// ================================
 export const logoutUser = async () => {
-  await signOut(auth);
-  localStorage.removeItem("loginTime");
-  sessionStorage.clear();
+  try {
+    await signOut(auth);
+  } finally {
+    localStorage.removeItem("loginTime");
+    sessionStorage.clear();
+  }
 };
 
+// ================================
 // AUTH LISTENER
+// ================================
 export const onAuthChange = (callback) => {
   return onAuthStateChanged(auth, callback);
 };

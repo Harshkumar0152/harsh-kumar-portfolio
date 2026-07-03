@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { signInWithPopup, signOut } from "firebase/auth";
-import { auth, provider } from "../firebase";
+import { signOut } from "firebase/auth";
+import { auth, loginWithGoogle } from "../firebase";
 import "../stylesheets/Login.css";
 
 export default function Login() {
@@ -39,19 +39,11 @@ export default function Login() {
     try {
       localStorage.removeItem("loginTime");
 
-      const result = await signInWithPopup(auth, provider);
-
-      if (result.user) {
-        localStorage.setItem("loginTime", Date.now().toString());
-
-        alert("✅ Login Successful!");
-      }
+      // Redirect to Google Sign-In
+      await loginWithGoogle();
     } catch (error) {
       console.error("Login Error:", error);
-
-      if (error.code !== "auth/popup-closed-by-user") {
-        alert(error.message);
-      }
+      alert(error.message);
     }
   };
 
