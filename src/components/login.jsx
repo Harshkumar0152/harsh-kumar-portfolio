@@ -1,5 +1,6 @@
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../firebase";
+import "../stylesheets/Login.css";
 
 export default function Login() {
   const handleLogin = async () => {
@@ -11,31 +12,35 @@ export default function Login() {
   };
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-        background: "#0f172a",
-        color: "white",
-      }}
-    >
-      <h1>Harsh Kumar Portfolio</h1>
+    <div className="login-page">
+      <div className="login-card">
 
-      <button
-        onClick={handleLogin}
-        style={{
-          marginTop: "20px",
-          padding: "12px 25px",
-          borderRadius: "10px",
-          cursor: "pointer",
-          fontSize: "18px",
-        }}
-      >
-        Sign in with Google
-      </button>
+        <div className="login-logo">
+       <img src="/Users/dheerajkaushik/Desktop/photo.jpeg" alt="Harsh Kumar" />
+       </div>
+
+        <h1>Harsh Kumar</h1>
+
+        <h3>Data Analyst Portfolio</h3>
+
+        <p>
+          Welcome! Sign in with your Google account to explore My
+          Portfolio, Projects, Certifications and Resume.
+        </p>
+
+        <button className="google-btn" onClick={handleLogin}>
+          <img
+            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+            alt="Google"
+          />
+          Continue with Google
+        </button>
+
+        <span>
+          Powered by React • Firebase • Vercel
+        </span>
+
+      </div>
     </div>
   );
 }
