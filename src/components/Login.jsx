@@ -1,11 +1,45 @@
-import { signInWithPopup } from "firebase/auth";
+import { useEffect } from "react";
+import { signInWithPopup, signOut } from "firebase/auth";
 import { auth, provider } from "../firebase";
 import "../stylesheets/Login.css";
 
 export default function Login() {
+  // Check session when component loads
+  useEffect(() => {
+    const loginTime = localStorage.getItem("loginTime");
+
+    if (loginTime) {
+      const SESSION_TIME = 10 * 60 * 1000; // 10 minutes
+      const diff = Date.now() - Number(loginTime);
+
+      if (diff >= SESSION_TIME) {
+        signOut(auth);
+        localStorage.removeItem("loginTime");
+      } else {
+        setTimeout(async () => {
+          await signOut(auth);
+          localStorage.removeItem("loginTime");
+          alert("Session expired. Please login again.");
+          window.location.reload();
+        }, SESSION_TIME - diff);
+      }
+    }
+  }, []);
+
   const handleLogin = async () => {
     try {
       await signInWithPopup(auth, provider);
+
+      // Save login time
+      localStorage.setItem("loginTime", Date.now());
+
+      // Auto logout after 10 minutes
+      setTimeout(async () => {
+        await signOut(auth);
+        localStorage.removeItem("loginTime");
+        alert("Session expired. Please login again.");
+        window.location.reload();
+      }, 10 * 60 * 1000);
     } catch (error) {
       console.error("Login Error:", error);
     }
