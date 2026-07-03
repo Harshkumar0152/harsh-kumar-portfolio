@@ -25,17 +25,21 @@ export default function Login() {
   }, []);
 
   const handleSessionExpire = async () => {
-    await signOut(auth);
-    localStorage.removeItem("loginTime");
+    try {
+      await signOut(auth);
+      localStorage.removeItem("loginTime");
 
-    alert("⏰ Session expired. Please login again.");
+      alert("⏰ Session expired. Please login again.");
 
-    window.location.reload();
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleLogin = async () => {
     try {
-      // Clean old session
+      // Clear old session only
       localStorage.removeItem("loginTime");
 
       const result = await signInWithPopup(auth, provider);
@@ -46,8 +50,8 @@ export default function Login() {
         alert("✅ Login Successful!");
         alert("⚠️ Session valid for 10 minutes only.");
 
-        setTimeout(() => {
-          handleSessionExpire();
+        setTimeout(async () => {
+          await handleSessionExpire();
         }, SESSION_TIME);
       }
     } catch (error) {
@@ -60,15 +64,16 @@ export default function Login() {
     <div className="Login-page">
       <div className="Login-card">
         <div className="Login-logo">
-          <img src="/images/photo.jpeg" alt="Profile" />
+          <img src="/images/photo.jpeg" alt="Harsh Kumar" />
         </div>
 
         <h1>Harsh Kumar</h1>
         <h3>Data Analyst Portfolio</h3>
 
         <p>
-          Sign in with Google to access portfolio, projects, certifications,
-          resume and more.
+          Welcome! Sign in with your Google account to explore my portfolio,
+          projects, certifications, resume, and professional journey in Data
+          Analytics.
         </p>
 
         <button className="google-btn" onClick={handleLogin}>
