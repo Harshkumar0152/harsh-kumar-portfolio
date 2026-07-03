@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, logoutUser } from "./firebase";
 import { useEffect, useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 import Login from "./components/Login";
 
@@ -88,6 +89,7 @@ function App() {
   return (
     <div className="flex flex-col items-center justify-center">
       <ToastContainer />
+      <Analytics />
 
       <button
         onClick={handleLogout}
