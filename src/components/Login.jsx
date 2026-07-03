@@ -4,7 +4,7 @@ import { auth, provider } from "../firebase";
 import "../stylesheets/Login.css";
 
 export default function Login() {
-  const SESSION_TIME = 10 * 60 * 1000; // 10 minutes
+  const SESSION_TIME = 10 * 60 * 1000; // 10 min
 
   useEffect(() => {
     const loginTime = localStorage.getItem("loginTime");
@@ -30,10 +30,6 @@ export default function Login() {
       localStorage.removeItem("loginTime");
 
       alert("⏰ Session expired. Please login again.");
-
-      // ❌ IMPORTANT FIX: reload remove karo (ye loop bana raha tha)
-      // window.location.reload();
-
     } catch (error) {
       console.error(error);
     }
@@ -49,16 +45,13 @@ export default function Login() {
         localStorage.setItem("loginTime", Date.now().toString());
 
         alert("✅ Login Successful!");
-        alert("⚠️ Session valid for 10 minutes only.");
-
-        // ❌ IMPORTANT FIX: ye bhi conflict create karta tha App.jsx ke saath
-        // setTimeout(async () => {
-        //   await handleSessionExpire();
-        // }, SESSION_TIME);
       }
     } catch (error) {
       console.error("Login Error:", error);
-      alert(error.message);
+
+      if (error.code !== "auth/popup-closed-by-user") {
+        alert(error.message);
+      }
     }
   };
 
@@ -66,16 +59,15 @@ export default function Login() {
     <div className="Login-page">
       <div className="Login-card">
         <div className="Login-logo">
-          <img src="/images/photo.jpeg" alt="Harsh Kumar" />
+          <img src="/images/photo.jpeg" alt="Profile" />
         </div>
 
         <h1>Harsh Kumar</h1>
         <h3>Data Analyst Portfolio</h3>
 
         <p>
-          Welcome! Sign in with your Google account to explore my portfolio,
-          projects, certifications, resume, and professional journey in Data
-          Analytics.
+          Sign in with Google to explore portfolio, projects,
+          certifications, resume, and professional journey.
         </p>
 
         <button className="google-btn" onClick={handleLogin}>
