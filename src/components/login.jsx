@@ -16,7 +16,7 @@ export default function Login() {
       <div className="login-card">
 
         <div className="login-logo">
-       <img src="/Users/dheerajkaushik/Desktop/photo.jpeg" alt="Harsh Kumar" />
+       <img src="public/images/photo.jpeg" alt="Harsh Kumar" />
        </div>
 
         <h1>Harsh Kumar</h1>
@@ -37,7 +37,8 @@ export default function Login() {
         </button>
 
         <span>
-          Powered by React • Firebase • Vercel
+          Powered by Harsh Kaushik 
+         | &copy; 2026 All Rights Reserved 
         </span>
 
       </div>
