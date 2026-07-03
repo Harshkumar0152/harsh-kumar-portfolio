@@ -6,6 +6,8 @@ import {
   getRedirectResult,
   signOut,
   onAuthStateChanged,
+  setPersistence,
+  browserLocalPersistence,
 } from "firebase/auth";
 
 // Firebase Config
@@ -21,9 +23,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
-
 export const provider = new GoogleAuthProvider();
 
+// 🔥 IMPORTANT: keeps user logged in permanently
+setPersistence(auth, browserLocalPersistence);
+
+// Google provider config
 provider.setCustomParameters({
   prompt: "select_account",
 });
@@ -31,33 +36,38 @@ provider.setCustomParameters({
 provider.addScope("email");
 provider.addScope("profile");
 
-// LOGIN
+// LOGIN (Redirect method)
 export const loginWithGoogle = async () => {
-  await signInWithRedirect(auth, provider);
+  try {
+    await signInWithRedirect(auth, provider);
+  } catch (error) {
+    console.error("Login Error:", error);
+  }
 };
 
-// Redirect Result
+// Handle Redirect Result
 export const handleRedirectResult = async () => {
   try {
     const result = await getRedirectResult(auth);
 
     if (result?.user) {
-      localStorage.setItem("loginTime", Date.now().toString());
       return result.user;
     }
 
     return null;
   } catch (error) {
-    console.error(error);
+    console.error("Redirect Error:", error);
     return null;
   }
 };
 
 // LOGOUT
 export const logoutUser = async () => {
-  await signOut(auth);
-  localStorage.removeItem("loginTime");
-  sessionStorage.clear();
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error("Logout Error:", error);
+  }
 };
 
 // AUTH LISTENER

@@ -6,7 +6,6 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, logoutUser } from "./firebase";
 import { useEffect, useState } from "react";
 
-
 import Login from "./components/Login";
 
 import Navbar from "./components/Navbar";
@@ -25,35 +24,9 @@ function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const SESSION_TIME = 10 * 60 * 1000;
-
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      const loginTime = localStorage.getItem("loginTime");
-
-      if (!currentUser || !loginTime) {
-        setUser(null);
-        setLoading(false);
-        return;
-      }
-
-      const diff = Date.now() - Number(loginTime);
-
-      if (diff >= SESSION_TIME) {
-        await logoutUser();
-        setUser(null);
-      } else {
-        setUser(currentUser);
-
-        // FIX: clear old timers before setting new one
-        const remainingTime = SESSION_TIME - diff;
-
-        setTimeout(async () => {
-          await logoutUser();
-          setUser(null);
-        }, remainingTime);
-      }
-
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
       setLoading(false);
     });
 
@@ -89,8 +62,8 @@ function App() {
   return (
     <div className="flex flex-col items-center justify-center">
       <ToastContainer />
-   
 
+      {/* Logout Button */}
       <button
         onClick={handleLogout}
         style={{
