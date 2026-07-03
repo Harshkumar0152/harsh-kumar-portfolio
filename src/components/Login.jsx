@@ -19,7 +19,7 @@ export default function Login() {
         setTimeout(async () => {
           await signOut(auth);
           localStorage.removeItem("loginTime");
-          alert("Session expired. Please login again.");
+          alert("⏰ Session expired. Please login again.");
           window.location.reload();
         }, SESSION_TIME - diff);
       }
@@ -30,6 +30,14 @@ export default function Login() {
     try {
       await signInWithPopup(auth, provider);
 
+      // Alert 1
+      alert("✅ Login Successful!");
+
+      // Alert 2
+      alert(
+        "⚠️ Your session is valid for only 10 minutes. After that, you will need to log in again."
+      );
+
       // Save login time
       localStorage.setItem("loginTime", Date.now());
 
@@ -37,7 +45,7 @@ export default function Login() {
       setTimeout(async () => {
         await signOut(auth);
         localStorage.removeItem("loginTime");
-        alert("Session expired. Please login again.");
+        alert("⏰ Session expired. Please login again.");
         window.location.reload();
       }, 10 * 60 * 1000);
     } catch (error) {
