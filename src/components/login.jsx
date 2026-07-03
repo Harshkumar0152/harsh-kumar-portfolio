@@ -12,9 +12,9 @@ export default function Login() {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-card">
-        <div className="login-logo">
+    <div className="Login-page">
+      <div className="Login-card">
+        <div className="Login-logo">
           <img src="/images/photo.jpeg" alt="Harsh Kumar" />
         </div>
 
@@ -35,7 +35,7 @@ export default function Login() {
           <span>Continue with Google</span>
         </button>
 
-        <span className="login-footer">
+        <span className="Login-footer">
           Powered by <strong>Harsh Kaushik</strong> <br />
           © 2026 All Rights Reserved
         </span>

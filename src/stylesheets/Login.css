@@ -1,4 +1,4 @@
-.login-page {
+.Login-page {
   width: 100%;
   height: 100vh;
   display: flex;
@@ -12,7 +12,7 @@
 }
 
 /* Dark Overlay */
-.login-page::before {
+.Login-page::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -21,7 +21,7 @@
 }
 
 /* Purple Glow */
-.login-page::after {
+.Login-page::after {
   content: "";
   position: absolute;
   width: 600px;
@@ -36,7 +36,7 @@
 }
 
 /* Login Card */
-.login-card {
+.Login-card {
   position: relative;
   z-index: 2;
   width: 430px;
@@ -52,13 +52,13 @@
   transition: 0.35s;
 }
 
-.login-card:hover {
+.Login-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
 }
 
 /* Glow */
-.login-card::before {
+.Login-card::before {
   content: "";
   position: absolute;
   inset: -2px;
@@ -70,7 +70,7 @@
 }
 
 /* Logo */
-.login-logo {
+.Login-logo {
   width: 90px;
   height: 90px;
   margin: auto;
@@ -80,27 +80,27 @@
   animation: floatLogo 3s ease-in-out infinite;
 }
 
-.login-logo img {
+.Login-logo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
 /* Text */
-.login-card h1 {
+.Login-card h1 {
   color: #fff;
   font-size: 38px;
   font-weight: 700;
   margin-bottom: 8px;
 }
 
-.login-card h3 {
+.Login-card h3 {
   color: #60a5fa;
   font-size: 22px;
   margin-bottom: 18px;
 }
 
-.login-card p {
+.Login-card p {
   color: #d6d6d6;
   font-size: 15px;
   line-height: 1.8;
@@ -134,7 +134,7 @@
   box-shadow: 0 15px 35px rgba(37, 99, 235, 0.35);
 }
 
-.login-footer {
+.Login-footer {
   display: block;
   margin-top: 25px;
   color: #cbd5e1;
@@ -175,16 +175,16 @@
 
 /* Mobile */
 @media (max-width: 500px) {
-  .login-card {
+  .Login-card {
     width: 90%;
     padding: 30px 22px;
   }
 
-  .login-card h1 {
+  .Login-card h1 {
     font-size: 30px;
   }
 
-  .login-card h3 {
+  .Login-card h3 {
     font-size: 18px;
   }
 }
