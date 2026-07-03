@@ -9,6 +9,7 @@ export default function Login() {
 
       if (result.user) {
         alert("✅ Login Successful!");
+        alert("🎉 Congratulations Harsh Kaushik!\nYou have completed your website successfully 🚀🔥");
         console.log("User:", result.user);
       }
     } catch (error) {
