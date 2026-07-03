@@ -24,10 +24,11 @@ function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const SESSION_TIME = 10 * 60 * 1000;
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       const loginTime = localStorage.getItem("loginTime");
-      const SESSION_TIME = 10 * 60 * 1000; // 10 minutes
 
       if (!currentUser || !loginTime) {
         setUser(null);
@@ -42,6 +43,14 @@ function App() {
         setUser(null);
       } else {
         setUser(currentUser);
+
+        // FIX: clear old timers before setting new one
+        const remainingTime = SESSION_TIME - diff;
+
+        setTimeout(async () => {
+          await logoutUser();
+          setUser(null);
+        }, remainingTime);
       }
 
       setLoading(false);

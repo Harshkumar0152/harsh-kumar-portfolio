@@ -31,7 +31,9 @@ export default function Login() {
 
       alert("⏰ Session expired. Please login again.");
 
-      window.location.reload();
+      // ❌ IMPORTANT FIX: reload remove karo (ye loop bana raha tha)
+      // window.location.reload();
+
     } catch (error) {
       console.error(error);
     }
@@ -39,7 +41,6 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      // Clear old session only
       localStorage.removeItem("loginTime");
 
       const result = await signInWithPopup(auth, provider);
@@ -50,9 +51,10 @@ export default function Login() {
         alert("✅ Login Successful!");
         alert("⚠️ Session valid for 10 minutes only.");
 
-        setTimeout(async () => {
-          await handleSessionExpire();
-        }, SESSION_TIME);
+        // ❌ IMPORTANT FIX: ye bhi conflict create karta tha App.jsx ke saath
+        // setTimeout(async () => {
+        //   await handleSessionExpire();
+        // }, SESSION_TIME);
       }
     } catch (error) {
       console.error("Login Error:", error);

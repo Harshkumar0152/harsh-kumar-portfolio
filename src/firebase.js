@@ -1,4 +1,3 @@
-
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -27,7 +26,6 @@ export const auth = getAuth(app);
 // Google Provider
 export const provider = new GoogleAuthProvider();
 
-// Ask Google to show account chooser when possible
 provider.setCustomParameters({
   prompt: "select_account",
 });
@@ -49,7 +47,6 @@ export const loginWithGoogle = async () => {
 export const logoutUser = async () => {
   await signOut(auth);
 
-  // Clear only app session
   localStorage.removeItem("loginTime");
   sessionStorage.clear();
 };
