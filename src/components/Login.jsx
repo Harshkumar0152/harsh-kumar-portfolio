@@ -16,12 +16,14 @@ export default function Login() {
         signOut(auth);
         localStorage.removeItem("loginTime");
       } else {
-        setTimeout(async () => {
+        const timer = setTimeout(async () => {
           await signOut(auth);
           localStorage.removeItem("loginTime");
           alert("⏰ Session expired. Please login again.");
           window.location.reload();
         }, SESSION_TIME - diff);
+
+        return () => clearTimeout(timer);
       }
     }
   }, []);
@@ -30,10 +32,8 @@ export default function Login() {
     try {
       await signInWithPopup(auth, provider);
 
-      // Alert 1
+      // Login alerts
       alert("✅ Login Successful!");
-
-      // Alert 2
       alert(
         "⚠️ Your session is valid for only 10 minutes. After that, you will need to log in again."
       );
@@ -48,6 +48,7 @@ export default function Login() {
         alert("⏰ Session expired. Please login again.");
         window.location.reload();
       }, 10 * 60 * 1000);
+
     } catch (error) {
       console.error("Login Error:", error);
     }
@@ -78,7 +79,8 @@ export default function Login() {
         </button>
 
         <span className="Login-footer">
-          Powered by <strong>Harsh Kaushik</strong> <br />
+          Powered by <strong>Harsh Kaushik</strong>
+          <br />
           © 2026 All Rights Reserved
         </span>
       </div>
