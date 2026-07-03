@@ -2,8 +2,8 @@ import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 
 import { ToastContainer } from "react-toastify";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "./firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, logoutUser } from "./firebase";
 import { useEffect, useState } from "react";
 
 import Login from "./components/Login";
@@ -22,31 +22,55 @@ import Footer from "./components/Footer";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       const loginTime = localStorage.getItem("loginTime");
+      const SESSION_TIME = 10 * 60 * 1000; // 10 minutes
 
-      if (!loginTime) {
-        signOut(auth);
+      if (!currentUser || !loginTime) {
         setUser(null);
+        setLoading(false);
         return;
       }
 
-      const SESSION_TIME = 10 * 60 * 1000;
       const diff = Date.now() - Number(loginTime);
 
       if (diff >= SESSION_TIME) {
-        signOut(auth);
-        localStorage.removeItem("loginTime");
+        await logoutUser();
         setUser(null);
       } else {
         setUser(currentUser);
       }
+
+      setLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
+
+  const handleLogout = async () => {
+    await logoutUser();
+    setUser(null);
+  };
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "20px",
+          fontWeight: "600",
+        }}
+      >
+        Loading...
+      </div>
+    );
+  }
 
   if (!user) {
     return <Login />;
@@ -57,11 +81,7 @@ function App() {
       <ToastContainer />
 
       <button
-        onClick={() => {
-          signOut(auth);
-          localStorage.removeItem("loginTime");
-          setUser(null);
-        }}
+        onClick={handleLogout}
         style={{
           position: "fixed",
           top: 20,
@@ -70,6 +90,10 @@ function App() {
           padding: "8px 15px",
           borderRadius: "8px",
           cursor: "pointer",
+          background: "#dc3545",
+          color: "#fff",
+          border: "none",
+          fontWeight: "600",
         }}
       >
         Logout

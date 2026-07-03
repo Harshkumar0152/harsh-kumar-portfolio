@@ -7,7 +7,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 
-// 🔥 Firebase Config
+// Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyDawcu89o9mxf3Mrn5URrIQA71bNBT_E04",
   authDomain: "harshkaushik01-portfolio.firebaseapp.com",
@@ -17,55 +17,45 @@ const firebaseConfig = {
   appId: "1:386297952062:web:3032f06e2f96b5b750de6f",
 };
 
-// 🔥 Init App
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// 🔥 Auth
+// Auth
 export const auth = getAuth(app);
 
-// 🔥 Google Provider
+// Google Provider
 export const provider = new GoogleAuthProvider();
 
-// ⭐ FIX: force account selection
+// Ask Google to show account chooser when possible
 provider.setCustomParameters({
   prompt: "select_account",
 });
 
-
 // ================================
-// 🔐 LOGIN
+// LOGIN
 // ================================
 export const loginWithGoogle = async () => {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    return result.user;
-  } catch (error) {
-    console.log("Login Error:", error);
-  }
+  const result = await signInWithPopup(auth, provider);
+
+  localStorage.setItem("loginTime", Date.now().toString());
+
+  return result.user;
 };
 
-
 // ================================
-// 🚪 LOGOUT
+// LOGOUT
 // ================================
 export const logoutUser = async () => {
-  try {
-    await signOut(auth);
+  await signOut(auth);
 
-    // clear session (fix auto-login issue)
-    localStorage.clear();
-    sessionStorage.clear();
-  } catch (error) {
-    console.log("Logout Error:", error);
-  }
+  // Clear only app session
+  localStorage.removeItem("loginTime");
+  sessionStorage.clear();
 };
 
-
 // ================================
-// 👤 AUTH STATE LISTENER
+// AUTH LISTENER
 // ================================
 export const onAuthChange = (callback) => {
-  return onAuthStateChanged(auth, (user) => {
-    callback(user);
-  });
+  return onAuthStateChanged(auth, callback);
 };
