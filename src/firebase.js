@@ -26,7 +26,7 @@ export const auth = getAuth(app);
 // 🔥 Google Provider
 export const provider = new GoogleAuthProvider();
 
-// ✅ IMPORTANT FIX (prevents silent auto login behavior)
+// ⭐ FIX: force account selection
 provider.setCustomParameters({
   prompt: "select_account",
 });
@@ -46,14 +46,15 @@ export const loginWithGoogle = async () => {
 
 
 // ================================
-// 🚪 LOGOUT (IMPORTANT FIX ADDED)
+// 🚪 LOGOUT
 // ================================
 export const logoutUser = async () => {
   try {
     await signOut(auth);
 
-    // 🔥 extra safety (clears session hints)
-    await auth.signOut?.();
+    // clear session (fix auto-login issue)
+    localStorage.clear();
+    sessionStorage.clear();
   } catch (error) {
     console.log("Logout Error:", error);
   }
