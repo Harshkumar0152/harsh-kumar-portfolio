@@ -10,8 +10,8 @@ const projects = [
       "Built an interactive Power BI dashboard to analyze sales, revenue, profit, and KPIs using DAX, Power Query, and dynamic visualizations.",
     tech: ["Power BI", "Excel", "DAX", "Power Query"],
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800",
-    github: "https://github.com/Harshkumar0152",
-    demo: "https://sales-dashboard-harsh.vercel.app",
+    github: "https://github.com/Harshkumar0152/Sales-Performance-Dashboard-PowerBI",
+    demo: "https://github.com/Harshkumar0152/Sales-Performance-Dashboard-PowerBI",
     category: "Power BI",
   },
 
